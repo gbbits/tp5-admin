@@ -1,0 +1,225 @@
+<!------------------- 头部CSS部分 start-------------------------------------------------------------------------------->
+{include file="Public/head"/}
+<!------------------- 头部CSS部分 end---------------------------------------------------------------------------------->
+
+<body class="no-skin">
+
+<!---------------------头部消息栏,用户栏 start--------------------------------------------------------------------->
+{include file="Public/header"/}
+<!---------------------头部消息栏,用户栏 end----------------------------------------------------------------------->
+
+<div class="main-container" id="main-container">
+    <script type="text/javascript">
+        try {
+            ace.settings.check('main-container', 'fixed')
+        } catch (e) {
+        }
+    </script>
+
+    <!-------------------------菜单栏 start-------------------------------------------------------------------->
+    {include file="Public/menu"/}
+    <!-------------------------菜单栏 end---------------------------------------------------------------------->
+
+    <div class="main-content">
+        <div class="main-content-inner">
+
+            <!-------------------------------路径导航 面包屑 start--------------------------------------------->
+            {include file="Public/breadcrumbs"/}
+            <!-------------------------------路径导航 面包屑 end----------------------------------------------->
+
+            <div class="page-content">
+
+                <!-----------------------------右侧设置 页面提示消息 start------------------------------------->
+                {include file="Public/set"/}
+                <!-----------------------------右侧设置 页面提示消息 end--------------------------------------->
+
+                <div class="row">
+                    <div class="col-xs-12">
+                        <!-- PAGE CONTENT BEGINS -->
+                        <form class="form-horizontal" action="{:url('update')}" method="post" enctype="multipart/form-data">
+                            <div class="form-group">
+                                <label class="col-sm-1 control-label no-padding-right" for="form-field-10"> 用户组 </label>
+                                <div class="col-sm-9">
+                                    {if condition="$user.id eq 1"}
+                                        {volist name="usergroup" id="val"}
+                                            {if condition="$val.id eq $user.group_id"}
+                                                <input type="text" class="col-xs-10 col-sm-5" value="{$val.name}" readonly>
+                                                <input type="hidden" name="group_id" id="group_id" class="col-xs-10 col-sm-5" value="{$user.group_id}">
+                                            {/if}
+                                        {/volist}
+
+                                        {else/}
+                                        <select id="group_id" name="group_id" class="rcol-xs-10 col-sm-5">
+                                            {volist name="usergroup" id="val"}
+                                                <option value="{$val.id}"
+                                                {if condition="$val.id eq $user.group_id"}
+                                                        selected="selected"
+                                                {/if}
+                                                >{$val.name}</option>
+                                            {/volist}
+                                        </select>
+                                    {/if}
+                                    <span class="help-inline col-xs-12 col-sm-7">
+												<span class="middle">请慎重选择用户组</span>
+											</span>
+                                </div>
+                            </div>
+
+                            <div class="space-4"></div>
+
+                            <div class="form-group">
+                                <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 用户名 </label>
+                                <div class="col-sm-9">
+                                    <input type="text" placeholder="用户名" name="username" class="rcol-xs-10 col-sm-5" value="{$user.username}">
+                                    <span class="help-inline col-xs-12 col-sm-7">
+											<span class="middle"></span>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="space-4"></div>
+
+                            <div class="form-group">
+                                <label class="col-sm-1 control-label no-padding-right" for="form-field-2"> 用户密码 </label>
+                                <div class="col-sm-9">
+                                    <input type="password" name="password" id="password" placeholder="用户密码"
+                                           class="col-xs-10 col-sm-5" value="">
+                                    <span class="help-inline col-xs-12 col-sm-7">
+												<span class="middle">留空不修改</span>
+											</span>
+                                </div>
+                            </div>
+
+                            <div class="space-4"></div>
+
+                            <div class="form-group">
+                                <label class="col-sm-1 control-label no-padding-right" for="form-field-4"> 头像 </label>
+                                    <div class="col-sm-9">
+                                        <div class="col-xs-10 col-sm-5">
+                                            <span class="profile-picture photo" style="cursor: pointer;" onclick="photo()" >
+                                                {empty name="user.photo"}
+                                                <i class=" ace-icon fa fa-picture-o" style="color: #D5D5D5;font-size: 100px;height: 100px;"></i>
+                                                <img src="">
+                                                {else /}
+                                                <img style="width: 107px;height: 100px;" src="{$user.photo}">
+                                                {/empty}
+                                            </span>
+                                            <input type="file" name="photo" id="photo" accept="image/*" style="display: none;" />
+                                        </div>
+                                        <span class="help-inline col-xs-12 col-sm-7">
+                                                    <span class="middle">仅支持jpg、gif、png、bmp、jpeg，且小于1MB。</span>
+                                                </span>
+                                    </div>
+                            </div>
+
+
+                            <div class="space-4"></div>
+
+                            <div class="form-group">
+                                <label class="col-sm-1 control-label no-padding-right" for="form-field-4"> 性别 </label>
+                                <div class="col-sm-9">
+                                    <select id="sex" name="sex" class="multiselect">
+                                        <option value="0"
+                                        {if condition="$user.sex eq 0"}selected="selected"{/if}
+                                        >保密</option>
+                                        <option value="1"
+                                        {if condition="$user.sex eq 1"}selected="selected"{/if}
+                                        >男</option>
+                                        <option value="2"
+                                        {if condition="$user.sex eq 2"}selected="selected"{/if}
+                                        >女</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="space-4"></div>
+
+                            <div class="form-group">
+                                <label class="col-sm-1 control-label no-padding-right" for="form-field-6"> 电话号码 </label>
+                                <div class="col-sm-9">
+                                    <input type="text" name="tel" id="tel" placeholder="电话号码"
+                                           class="col-xs-10 col-sm-5" value="{$user.tel}">
+                                    <span class="help-inline col-xs-12 col-sm-7">
+												<span class="middle"></span>
+											</span>
+                                </div>
+                            </div>
+
+                            <div class="space-4"></div>
+
+                            <div class="form-group">
+                                <label class="col-sm-1 control-label no-padding-right" for="form-field-8">
+                                    E-mail </label>
+                                <div class="col-sm-9">
+                                    <input type="email" name="email" id="email" placeholder="邮箱"
+                                           class="col-xs-10 col-sm-5" value="{$user.email}">
+                                    <span class="help-inline col-xs-12 col-sm-7">
+												<span class="middle"></span>
+											</span>
+                                </div>
+                            </div>
+
+                            <div class="space-4"></div>
+
+                            <div class="col-md-offset-2 col-md-9">
+                                <button class="btn btn-info" type="submit">
+                                    <i class="icon-ok bigger-110"></i>
+                                    提交
+                                </button>
+
+                                &nbsp; &nbsp; &nbsp;
+                                <button class="btn" type="reset">
+                                    <i class="icon-undo bigger-110"></i>
+                                    重置
+                                </button>
+                            </div>
+                            <input type="hidden" name="id" value="{$user.id}">
+                            <input type="hidden" name="__token__" value="{$Request.token}">
+                        </form>
+                        <!-- PAGE CONTENT ENDS -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--------------------------------底部版权 置顶 start------------------------------------------------------>
+    {include file="Public/footer"/}
+    <!--------------------------------底部版权 置顶 end-------------------------------------------------------->
+
+</div>
+
+<!--------------------------------------底部JS start----------------------------------------------------------->
+{include file="Public/footerjs"/}
+<!--------------------------------------底部JS end------------------------------------------------------------->
+
+<script type="text/javascript">
+    //js打开file input
+    function photo() {
+        document.getElementById("photo").click();
+    }
+    //input选择图片的时候
+    document.getElementById("photo").addEventListener("change",function () {
+        var objUrl = getObjectURL(this.files[0]);
+        if (objUrl) {
+            $('.photo img').attr('src',objUrl);
+            $('.photo img').css({'height':'100px','width':'107px'});
+            $('.photo i').css("display", "none");
+        }
+    });
+    //获取图片地址
+    function getObjectURL(file) {
+        var url = null;
+        if (window.createObjectURL != undefined) {
+            url = window.createObjectURL(file);
+        } else if (window.URL != undefined) {
+            url = window.URL.createObjectURL(file);
+        } else if (window.webkitURL != undefined) {
+            url = window.webkitURL.createObjectURL(file);
+        }
+        return url;
+    }
+
+</script>
+</body>
+</html>
